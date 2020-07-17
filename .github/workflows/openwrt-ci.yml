@@ -10,11 +10,14 @@
 name: OpenWrt-CI
 
 on:
-  schedule:
-    - cron: 0 20 * * *
+  repository_dispatch:
+  release:
+    types: published
   push:
-    tags:
-      - '*'
+    branches:
+      - master
+    paths:
+      - '.config'
 
 jobs:
 
@@ -49,8 +52,6 @@ jobs:
           ./scripts/feeds update -a
           ./scripts/feeds install -a
 
-      - name: Generate configuration file
-        run: make defconfig
 
       - name: Make download
         run: |
